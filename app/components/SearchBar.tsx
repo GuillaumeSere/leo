@@ -32,7 +32,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         placeholder="Rechercher une vidéo..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        className="flex-1 p-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-yellow-300"
+        className="flex-1 p-3 bg-[#ffffff6b] rounded-l-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-yellow-300"
       />
       <button
         type="submit"

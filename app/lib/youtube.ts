@@ -1,6 +1,9 @@
 const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
-const CHANNEL_ID ="UCwJUclEDb0mP7bDpOgBtIBw"; 
+const CHANNEL_ID = "UCwJUclEDb0mP7bDpOgBtIBw";
 
+/**
+ * Recherche des vidéos sur la chaîne YouTube par mot-clé
+ */
 export async function searchYoutubeVideos(query: string) {
   try {
     const res = await fetch(
@@ -12,13 +15,11 @@ export async function searchYoutubeVideos(query: string) {
 
     const data = await res.json();
 
-    // 🧨 Si l'API renvoie une erreur, on l'affiche
     if (!res.ok || data.error) {
       console.error("YouTube API ERROR 👉", data);
       return [];
     }
 
-    // 🛡️ Protection si items n'existe pas
     if (!data.items) {
       console.error("YouTube API returned no items 👉", data);
       return [];
@@ -27,6 +28,7 @@ export async function searchYoutubeVideos(query: string) {
     return data.items.map((item: any) => ({
       id: item.id.videoId,
       title: item.snippet.title,
+      description: item.snippet.description, // ✅ récupère la description
       thumbnail: item.snippet.thumbnails.high.url,
     }));
   } catch (error) {
@@ -34,3 +36,59 @@ export async function searchYoutubeVideos(query: string) {
     return [];
   }
 }
+
+/**
+ * Récupère une seule vidéo par son ID
+ */
+export async function getVideoById(id: string) {
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${API_KEY}`,
+      { next: { revalidate: 3600 } }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok || !data.items || data.items.length === 0) {
+      console.error("YouTube API error or video not found:", data);
+      return null;
+    }
+
+    const snippet = data.items[0].snippet;
+
+    return {
+      id,
+      title: snippet.title,
+      description: snippet.description,
+      thumbnail: snippet.thumbnails.high.url,
+    };
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return null;
+  }
+}
+
+export async function getAllChannelVideos() {
+  const maxResults = 50; // max 50 par requête
+
+  try {
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&type=video&order=date&maxResults=${maxResults}&key=${API_KEY}`,
+      { next: { revalidate: 3600 } }
+    );
+
+    const data = await res.json();
+    if (!res.ok || !data.items) return [];
+
+    return data.items.map((item: any) => ({
+      id: item.id.videoId,
+      title: item.snippet.title,
+      description: item.snippet.description,
+      thumbnail: item.snippet.thumbnails.high.url,
+    }));
+  } catch (err) {
+    console.error("Erreur getAllChannelVideos", err);
+    return [];
+  }
+}
+
