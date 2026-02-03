@@ -4,7 +4,7 @@ type Props = { text: string };
 
 export default function WaveText({ text }: Props) {
   return (
-    <h1 className="text-5xl md:text-7xl font-extrabold text-yellow-300 drop-shadow-lg flex justify-center flex-wrap">
+    <h1 className="text-2xl md:text-7xl font-extrabold text-yellow-300 drop-shadow-lg flex justify-center flex-wrap">
         😂 
       {text.split("").map((char, i) => (
         <span
