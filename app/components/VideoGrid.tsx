@@ -72,7 +72,7 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
                 )}
 
                 <div className="bg-[#ffffff2e] rounded-md p-6">
-                    <div className="flex justify-between">
+                    <div className="flex relative group justify-between">
                         <h2 className="text-2xl font-bold mb-4 text-white drop-shadow">
                             🎬 Toutes les aventures
                         </h2>
@@ -80,8 +80,11 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
                             onClick={handleSurprise}
                             className="mb-6 px-6 py-3 cursor-pointer bg-yellow-300 text-black font-bold rounded hover:bg-yellow-400 transition"
                         >
-                            🎲 Surprends-moi
+                            🎲
                         </button>
+                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            Surprends-moi
+                        </span>
                     </div>
 
                     {/* Input de filtre dynamique */}
