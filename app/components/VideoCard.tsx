@@ -7,9 +7,10 @@ type Props = {
     id: string;
     title: string;
     thumbnail: string;
+    tags?: string[];
 };
 
-export default function VideoCard({ id, title, thumbnail }: Props) {
+export default function VideoCard({ id, title, thumbnail, tags = [] }: Props) {
     const [isFav, setIsFav] = useState(false);
     const [animate, setAnimate] = useState(false);
 
@@ -60,7 +61,26 @@ export default function VideoCard({ id, title, thumbnail }: Props) {
                     className="w-full h-48 object-cover"
                 />
 
-                <div className="p-3 font-bold text-black text-sm">{title}</div>
+                <div className="p-3">
+                    <div className="text-black text-sm">{title}</div>
+                    {tags.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                            {tags.slice(0, 8).map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="text-[12px] bg-gradient-to-r from-pink-200 via-yellow-200 to-blue-200 text-black px-3 py-1 rounded-full border-2 border-white shadow-md font-extrabold tracking-wide transition-transform hover:-rotate-1 hover:scale-105"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                            {tags.length > 8 && (
+                                <span className="text-[12px] bg-white/80 text-black px-3 py-1 rounded-full border-2 border-white shadow-sm font-extrabold">
+                                    +{tags.length - 8}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
         </Link>
     );

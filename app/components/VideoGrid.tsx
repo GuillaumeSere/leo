@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAllChannelVideos } from "../lib/youtube";
 import VideoCard from "./VideoCard";
@@ -10,20 +10,47 @@ type Video = {
     title: string;
     thumbnail: string;
     description?: string;
+    tags?: string[];
+};
+
+type VideoWithTags = Video & {
+    tags: string[];
 };
 
 export default function VideoGrid({ videos }: { videos: Video[] }) {
-    const [favorites, setFavorites] = useState<Video[]>([]);
+    const [favorites, setFavorites] = useState<VideoWithTags[]>([]);
     const [filterText, setFilterText] = useState<string>("");
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const router = useRouter();
+
+    const videosWithTags: VideoWithTags[] = useMemo(() => {
+        return videos.map((video): VideoWithTags => {
+            const tags = video.tags ?? [];
+            return { ...video, tags };
+        });
+    }, [videos]);
+
+    const availableTags = useMemo(() => {
+        const counts = new Map<string, number>();
+        videosWithTags.forEach((video) => {
+            video.tags.forEach((tag) => {
+                counts.set(tag, (counts.get(tag) ?? 0) + 1);
+            });
+        });
+
+        return Array.from(counts.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 12)
+            .map(([tag]) => tag);
+    }, [videosWithTags]);
 
     // Charger les favoris
     const loadFavorites = () => {
         const favIds: string[] = JSON.parse(
             localStorage.getItem("leo-favorites") || "[]"
         );
-        const favVideos = videos.filter((v) => favIds.includes(v.id));
+        const favVideos = videosWithTags.filter((v) => favIds.includes(v.id));
         setFavorites(favVideos);
     };
 
@@ -31,17 +58,31 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
         loadFavorites();
         window.addEventListener("favoritesUpdated", loadFavorites);
         return () => window.removeEventListener("favoritesUpdated", loadFavorites);
-    }, [videos]);
+    }, [videosWithTags]);
 
     // Filtrer les vidéos dynamiquement
-    const filteredVideos = videos.filter((video) => {
+    const filteredVideos = videosWithTags.filter((video) => {
         if (!filterText) return true; // aucun filtre
         const search = filterText.toLowerCase();
         return (
             video.title.toLowerCase().includes(search) ||
-            (video.description?.toLowerCase().includes(search) ?? false)
+            (video.description?.toLowerCase().includes(search) ?? false) ||
+            video.tags.some((tag) => tag.toLowerCase().includes(search))
         );
     });
+
+    const filteredByTags = filteredVideos.filter((video) => {
+        if (selectedTags.length === 0) return true;
+        return selectedTags.some((tag) => video.tags.includes(tag));
+    });
+
+    const toggleTag = (tagLabel: string) => {
+        setSelectedTags((prev) =>
+            prev.includes(tagLabel)
+                ? prev.filter((t) => t !== tagLabel)
+                : [...prev, tagLabel]
+        );
+    };
 
     const handleSurprise = async () => {
         const allVideos = await getAllChannelVideos();
@@ -96,11 +137,44 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
                         className="w-full p-3 mb-6 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-yellow-300"
                     />
 
+                    {availableTags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-6">
+                            <button
+                                type="button"
+                                onClick={() => setSelectedTags([])}
+                                className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                                    selectedTags.length === 0
+                                        ? "bg-yellow-300 text-black"
+                                        : "bg-white/70 text-black"
+                                }`}
+                            >
+                                Tous
+                            </button>
+                            {availableTags.map((tag) => {
+                                const isActive = selectedTags.includes(tag);
+                                return (
+                                    <button
+                                        key={tag}
+                                        type="button"
+                                        onClick={() => toggleTag(tag)}
+                                        className={`px-3 py-1 rounded-full text-sm font-semibold transition ${
+                                            isActive
+                                                ? "bg-yellow-300 text-black"
+                                                : "bg-white/70 text-black hover:bg-white"
+                                        }`}
+                                    >
+                                        {tag}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    )}
+
                     <div className="grid md:grid-cols-3 gap-6">
-                        {filteredVideos.map((video) => (
-                            <VideoCard key={video.id} {...video} />
+                        {filteredByTags.map((video) => (
+                            <VideoCard key={video.id} {...video} tags={video.tags} />
                         ))}
-                        {filteredVideos.length === 0 && (
+                        {filteredByTags.length === 0 && (
                             <p className="text-gray-200 col-span-full text-center">
                                 Aucune vidéo ne correspond à votre recherche.
                             </p>
