@@ -14,10 +14,10 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-6 text-black font-semibold">
-          <Link href="#recherche" className="hover:underline">
+          <Link href="/#recherche" className="hover:underline">
             Recherche
           </Link>
-          <Link href="#videos" className="hover:underline">
+          <Link href="/#videos" className="hover:underline">
             Vidéos
           </Link>
         </div>
@@ -57,10 +57,10 @@ export default function Navbar() {
 
       {isOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-3 text-black font-semibold">
-          <Link href="#recherche" className="hover:underline" onClick={() => setIsOpen(false)}>
+          <Link href="/#recherche" className="hover:underline" onClick={() => setIsOpen(false)}>
             Recherche
           </Link>
-          <Link href="#videos" className="hover:underline" onClick={() => setIsOpen(false)}>
+          <Link href="/#videos" className="hover:underline" onClick={() => setIsOpen(false)}>
             Vidéos
           </Link>
         </div>

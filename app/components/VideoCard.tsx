@@ -68,7 +68,7 @@ export default function VideoCard({ id, title, thumbnail, tags = [] }: Props) {
                             {tags.slice(0, 8).map((tag) => (
                                 <span
                                     key={tag}
-                                    className="text-[12px] bg-gradient-to-r from-pink-200 via-yellow-200 to-blue-200 text-black px-3 py-1 rounded-full border-2 border-white shadow-md font-extrabold tracking-wide transition-transform hover:-rotate-1 hover:scale-105"
+                                    className="text-[12px] bg-linear-to-r from-pink-200 via-yellow-200 to-blue-200 text-black px-3 py-1 rounded-full border-2 border-white shadow-md font-extrabold tracking-wide transition-transform hover:-rotate-1 hover:scale-105"
                                 >
                                     {tag}
                                 </span>

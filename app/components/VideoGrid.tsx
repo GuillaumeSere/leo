@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAllChannelVideos } from "../lib/youtube";
 import VideoCard from "./VideoCard";
+import { getRecommendations } from "../lib/recommendations";
 
 type Video = {
     id: string;
@@ -76,6 +77,11 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
         return selectedTags.some((tag) => video.tags.includes(tag));
     });
 
+    const recommendations = useMemo(() => {
+        if (videosWithTags.length < 2) return [];
+        return getRecommendations(videosWithTags, videosWithTags[0], 6);
+    }, [videosWithTags]);
+
     const toggleTag = (tagLabel: string) => {
         setSelectedTags((prev) =>
             prev.includes(tagLabel)
@@ -107,6 +113,19 @@ export default function VideoGrid({ videos }: { videos: Video[] }) {
                         <div className="grid md:grid-cols-3 gap-6">
                             {favorites.map((video) => (
                                 <VideoCard key={video.id} {...video} />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {recommendations.length > 0 && (
+                    <div className="bg-[#ffffff2e] rounded-md p-6">
+                        <h2 className="text-2xl font-bold mb-6 text-white drop-shadow">
+                            🎯 Propositions pour toi
+                        </h2>
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {recommendations.map((video) => (
+                                <VideoCard key={video.id} {...video} tags={video.tags} />
                             ))}
                         </div>
                     </div>
