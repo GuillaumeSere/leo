@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = "https://tonsite.com"; // ← remplace par ton vrai domaine
+    const baseUrl = "https://leo-olive.vercel.app"; // ← remplace par ton vrai domaine
 
     // 🔥 Si tu as une liste d’IDs vidéos (ex: récupérées via API ou fichier)
     const videoIds = [
