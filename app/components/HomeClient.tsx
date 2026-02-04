@@ -48,7 +48,7 @@ export default function HomeClient() {
           <WaveText text="Les aventures de Léo" />
 
           {/* Petite description */}
-          <p className="mt-4 text-sm md:text-xl bg-[rgba(255,255,255,0.5)] p-1 rounded-md text-black font-bold drop-shadow max-w-xl">
+          <p className="mt-4 text-sm md:text-xl bg-[rgba(255,255,255,0.5)] p-1 rounded-md text-black drop-shadow max-w-xl">
             Découvrez les vidéos comiques de Léo, notre enfant IA blond de 3 ans,
             qui vit des aventures hilarantes et fait rire toute la famille, et
             d'autres vidéos !
@@ -64,7 +64,7 @@ export default function HomeClient() {
           <div id="recherche" className="mt-8 w-full max-w-xl">
             <SearchBar onSearch={(q) => setQuery(q)} />
           </div>
-          <p className="mt-8 text-sm md:text-xl bg-[rgba(255,255,255,0.5)] p-1 rounded-md text-black font-bold drop-shadow max-w-xl">
+          <p className="mt-8 text-sm md:text-xl bg-[rgba(255,255,255,0.5)] p-1 rounded-md text-black drop-shadow max-w-xl">
             Entre bêtises imprévues, situations absurdes et réactions trop
             mignonnes pour être vraies, Léo transforme les petits moments du
             quotidien en scènes totalement déjantées. Prépare-toi à sourire,
