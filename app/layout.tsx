@@ -14,21 +14,63 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Léo, le Petit Génie des Bêtises – Vidéos Drôles 😂",
-    description: "Découvrez Léo, l’adorable enfant IA de 3 ans qui vit des situations hilarantes ! Des vidéos comiques, des bêtises inoubliables et de l’humour pour toute la famille.",
-      keywords: [
+  metadataBase: new URL("https://leo-olive.netlify.app"),
+  title: {
+    default: "Les aventures de Léo | Vidéos drôles en famille",
+    template: "%s | Les aventures de Léo",
+  },
+  description:
+    "Découvrez les aventures de Léo, un enfant IA de 3 ans dans des vidéos drôles, des bêtises hilarantes et un univers familial plein d’humour.",
+  keywords: [
     "vidéos comiques",
     "humour enfant",
     "personnage IA",
     "vidéos drôles",
     "divertissement famille",
+    "aventures de Léo",
   ],
+  authors: [{ name: "Les aventures de Léo" }],
+  creator: "Les aventures de Léo",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google: "hGMCr1W6D99RGbRgZ1WGKJuTdw_Mmqq7rlSObwX_1Ic",
+  },
   openGraph: {
-    title: "Les aventures de Léo – Univers de vidéos comiques IA",
+    title: "Les aventures de Léo | Vidéos drôles en famille",
     description:
-      "Un univers fun rempli de vidéos drôles avec Léo et d'autres personnages créés par IA.",
-    images: ["/images/leo.png"],
+      "Un univers fun rempli de vidéos drôles avec Léo et d’autres personnages créés par IA.",
+    url: "/",
+    siteName: "Les aventures de Léo",
+    locale: "fr_FR",
     type: "website",
+    images: [
+      {
+        url: "/images/leo.png",
+        width: 1200,
+        height: 630,
+        alt: "Léo, le personnage principal des aventures vidéo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Les aventures de Léo | Vidéos drôles en famille",
+    description:
+      "Regardez des vidéos hilarantes avec Léo et d’autres personnages IA dans un univers fun et familial.",
+    images: ["/images/leo.png"],
   },
 };
 
@@ -39,28 +81,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="fr">
-            <head>
-                <meta name="google-site-verification" content="nwVPqsKRGvHVh9v-Qn4QoawQzNbN99Sfg6usOSlUEhg" />
-                <meta name="description" content="Découvrez Les aventures de Léo, un univers de vidéos comiques avec un enfant IA et d'autres personnages drôles. Humour, bêtises et divertissement pour toute la famille !" />
-                <meta name="keywords" content="vidéos comiques, humour enfant, personnage IA, vidéos drôles, divertissement famille, enfant virtuel, blagues vidéo, site humour" />
-
-                <meta property="og:title" content="Les aventures de Léo – Univers de vidéos comiques IA" />
-                <meta property="og:description" content="Un univers fun rempli de vidéos drôles avec Léo et d'autres personnages créés par IA. Rires garantis !" />
-                <meta property="og:image" content="https://leo-olive.vercel.app/images/leo.png" />
-                <meta property="og:url" content="https://leo-olive.vercel.app/" />
-                <meta property="og:type" content="website" />
-
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Les aventures de Léo – Vidéos comiques IA" />
-                <meta name="twitter:description" content="Regardez des vidéos hilarantes avec Léo et d'autres personnages IA dans un univers fun et familial." />
-                <meta name="twitter:image" content="https://leo-olive.vercel.app/images/leo.png" />
-            </head>
             <body
                 className={`${fredoka.variable} ${geistMono.variable} antialiased pt-16`}
-            >
-                <Navbar />
-                {children}
-            </body>
-        </html>
+        >
+          <Navbar />
+          {children}
+        </body>
+      </html>
     );
-}
+  }
